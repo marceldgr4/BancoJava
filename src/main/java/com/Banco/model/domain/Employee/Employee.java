@@ -1,15 +1,28 @@
-package com.Banco.model.domain;
+package com.Banco.model.domain.Employee;
 
-public class Employee extends Clients{
+import com.Banco.model.domain.Person.Client;
+
+public class Employee extends Client {
+    private int id;
     private int yearWorked;
     private String workStation;
     private  double salary;
 
-    public Employee(String userNumber, String fullName, int yearWorked, String workStation, double salary) {
+    public Employee(int id,String userNumber, String fullName, int yearWorked, String workStation, double salary) {
         super(userNumber, fullName);
+        this.id = id;
         this.yearWorked = yearWorked;
         this.workStation = workStation;
         this.salary = salary;
+    }
+
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getYearWorked() {
