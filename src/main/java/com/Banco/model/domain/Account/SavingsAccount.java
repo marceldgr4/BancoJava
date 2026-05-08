@@ -1,10 +1,10 @@
-package com.Banco.model.domain;
+package com.Banco.model.domain.Account;
 
 public class SavingsAccount extends Account {
     private double AnnualSavingsPercentage;
     private double MonthlySavingsPercentage;
 
-    public SavingsAccount(String accountNumber, Clients owner, double Beginningbalance, double annualSavingsPercentage, double monthlySavingsPercentage) {
+    public SavingsAccount(String accountNumber, Client owner, double Beginningbalance, double annualSavingsPercentage, double monthlySavingsPercentage) {
         super(accountNumber, owner, Beginningbalance);
         AnnualSavingsPercentage = annualSavingsPercentage;
         MonthlySavingsPercentage = monthlySavingsPercentage;
