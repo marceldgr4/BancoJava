@@ -21,6 +21,21 @@ public class AccountRepository {
                 .findFirst();
     }
 
+    public void save(BankAccount account) {
+        if (account == null)
+            throw new IllegalArgumentException("Account must not be null");
+        // Check if already added to avoid duplicates if needed
+        if (!account.getOwner().getAccounts().contains(account)) {
+            account.getOwner().addAccount(account);
+        }
+    }
+
+    public boolean deleteByAccountNumber(String accountNumber) {
+        return findByAccountNumber(accountNumber)
+                .map(account -> account.getOwner().removeAccount(account))
+                .orElse(false);
+    }
+
     public boolean existsByAccountNumber(String accountNumber) {
         return findByAccountNumber(accountNumber).isPresent();
     }

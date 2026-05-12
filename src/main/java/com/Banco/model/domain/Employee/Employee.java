@@ -1,6 +1,6 @@
 package com.Banco.model.domain.Employee;
 
-import com.Banco.model.Emun.EmployeeType;
+import com.Banco.model.type.EmployeeType;
 import com.Banco.model.domain.Person.Person;
 
 public abstract class Employee extends Person {

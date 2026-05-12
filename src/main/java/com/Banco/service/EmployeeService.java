@@ -1,5 +1,7 @@
 package com.Banco.service;
 
+import com.Banco.exceptions.DuplicateResourceException;
+import com.Banco.exceptions.EmployeeNotFoundException;
 import com.Banco.model.domain.Employee.Employee;
 import com.Banco.repository.EmployeeRepository;
 
@@ -11,22 +13,22 @@ public class EmployeeService {
 
     public EmployeeService(EmployeeRepository employeeRepository) {
         if (employeeRepository == null)
-            throw new IllegalArgumentException("EmployeeRepositori must not  be null");
+            throw new IllegalArgumentException("EmployeeRepository must not be null");
         this.employeeRepository = employeeRepository;
         }
         public void addEmployee(Employee employee){
         if (employee == null)
             throw new IllegalArgumentException("Employee must  not  be null");
         if (employeeRepository.existsById(employee.getId()))
-            throw new IllegalArgumentException("Employee winth ID'"+employee.getId()+ "'already exists");
+            throw new DuplicateResourceException("Employee with ID '" + employee.getId() + "' already exists");
         employeeRepository.save(employee);
     }
-    public  Optional<Employee> findEmploteeById(int id){
+    public Optional<Employee> findEmployeeById(int id){
         return employeeRepository.findById(id);
     }
     public Employee getEmployeeById(int id){
         return employeeRepository.findById(id)
-                .orElseThrow(()->new IllegalArgumentException("Employee not found with id"+id));
+                .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
     public List<Employee> getAllEmployees(){

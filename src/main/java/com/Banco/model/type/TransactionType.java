@@ -1,4 +1,4 @@
-package com.Banco.model.Emun;
+package com.Banco.model.type;
 
 public enum TransactionType {
     DEPOSIT,

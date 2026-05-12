@@ -26,7 +26,7 @@ public class AccountController {
         return accountService.fullWithdraw(accountNumber);
     }
     public void applyMonthlyInterest(){
-        accountService.applyMonthInterestToAllSaving();
+        accountService.applyMonthlyInterestToAllSavings();
     }
     public List<BankAccount> getClientAccounts(int clientId){
         return accountService.getAccountsByClient(clientId);

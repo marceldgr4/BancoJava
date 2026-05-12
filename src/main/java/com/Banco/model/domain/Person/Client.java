@@ -25,7 +25,11 @@ public class Client extends Person {
         if (account == null)
             throw new IllegalArgumentException("Account cannot be null");
             accounts.add(account);
-        }
+    }
+
+    public boolean removeAccount(BankAccount account) {
+        return accounts.remove(account);
+    }
 
         public List<BankAccount> getAccounts(){
             return Collections.unmodifiableList(accounts);

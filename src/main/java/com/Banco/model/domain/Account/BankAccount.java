@@ -1,6 +1,6 @@
 package com.Banco.model.domain.Account;
 
-import com.Banco.model.Emun.TransactionType;
+import com.Banco.model.type.TransactionType;
 import com.Banco.model.Transaction.Transaction;
 import com.Banco.model.domain.Person.Client;
 

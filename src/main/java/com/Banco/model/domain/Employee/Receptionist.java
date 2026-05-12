@@ -1,6 +1,6 @@
 package com.Banco.model.domain.Employee;
 
-import com.Banco.model.Emun.EmployeeType;
+import com.Banco.model.type.EmployeeType;
 
 public class Receptionist extends Employee {
     public Receptionist(int id, String fullname, double salary, int yearsWorked) {

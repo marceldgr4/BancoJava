@@ -1,6 +1,6 @@
 package com.Banco.util;
 
-import com.Banco.execption.InvalidAmountException;
+import com.Banco.exceptions.InvalidAmountException;
 
 public final class InputHelper {
     private InputHelper() {}
