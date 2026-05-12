@@ -1,7 +1,8 @@
-package com.Banco.view;
+package com.Banco.view.panel;
 
 import com.Banco.controller.BankController;
 import com.Banco.model.Transaction.Transaction;
+import com.Banco.view.base.BaseTablePanel;
 
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;
