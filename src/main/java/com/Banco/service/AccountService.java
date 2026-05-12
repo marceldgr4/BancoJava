@@ -1,6 +1,7 @@
 package com.Banco.service;
 
 import com.Banco.exceptions.AccountNotFoundException;
+import com.Banco.exceptions.AccountOwnershipException;
 import com.Banco.exceptions.ClientNotFoundException;
 import com.Banco.exceptions.DuplicateResourceException;
 import com.Banco.model.domain.Account.BankAccount;
@@ -60,20 +61,22 @@ public class AccountService {
      public BankAccount getByAccountNumber(String accountNumber) {
      return accountRepository.findByAccountNumber(accountNumber).orElseThrow(()-> new AccountNotFoundException(accountNumber));
      }
+
+    public void withdraw(int clientId, String accountNumber, double amount) {
+        BankAccount account = getByAccountNumber(accountNumber);
+        if (account.getOwner().getId() != clientId) {
+            throw new AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
+        }
+        account.withdraw(amount);
+    }
      public void deposit(int clientId, String accountNumber, double amount) {
          BankAccount account = getByAccountNumber(accountNumber);
          if (account.getOwner().getId() != clientId) {
-             throw new com.Banco.exceptions.AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
+             throw new AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
          }
          account.deposit(amount);
      }
-     public void withdraw(int clientId, String accountNumber, double amount) {
-         BankAccount account = getByAccountNumber(accountNumber);
-         if (account.getOwner().getId() != clientId) {
-             throw new com.Banco.exceptions.AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
-         }
-         account.withdraw(amount);
-     }
+
 
     public double fullWithdraw(String accountNumber) {
         BankAccount account = getByAccountNumber(accountNumber);

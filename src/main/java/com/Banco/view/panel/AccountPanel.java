@@ -65,6 +65,10 @@ public class AccountPanel extends BaseTablePanel {
     }
 
     private void deposit() {
+        String clientIdStr = JOptionPane.showInputDialog(this, "Enter your Client ID:");
+        if (clientIdStr == null || clientIdStr.trim().isEmpty()) return;
+        int clientId = Integer.parseInt(clientIdStr);
+
         int selectedRow = table.getSelectedRow();
         if (selectedRow < 0) {
             JOptionPane.showMessageDialog(this, "Please select an account from the table.");
@@ -73,9 +77,9 @@ public class AccountPanel extends BaseTablePanel {
         String accNum = (String) tableModel.getValueAt(selectedRow, 0);
         String amountStr = JOptionPane.showInputDialog(this, "Enter Deposit Amount:");
         if (amountStr == null || amountStr.trim().isEmpty()) return;
-        String clientIdStr = JOptionPane.showInputDialog(this, "Enter Client ID:");
+       /*String clientIdStr = JOptionPane.showInputDialog(this, "Enter Client ID:");
         if (clientIdStr == null || clientIdStr.trim().isEmpty()) return;
-        int clientId = Integer.parseInt(clientIdStr);
+        int clientId = Integer.parseInt(clientIdStr);*/
 
         try {
             double amount = Double.parseDouble(amountStr);

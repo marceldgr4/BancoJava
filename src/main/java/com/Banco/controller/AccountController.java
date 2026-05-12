@@ -16,12 +16,15 @@ public class AccountController {
     public BankAccount getBankAccount(String accountNumber){
         return accountService.getByAccountNumber(accountNumber);
     }
-    public void deposit(int clientId, String accountNumber, double amount){
-        accountService.deposit(clientId, accountNumber, amount);
-    }
+
     public void withdraw(int clientId, String accountNumber, double amount){
         accountService.withdraw(clientId, accountNumber, amount);
     }
+
+    public void deposit(int clientId, String accountNumber, double amount){
+        accountService.deposit(clientId, accountNumber, amount);
+    }
+
     public void openSavingsAccount(int clientId, String accountNumber, double initialBalance, double interestRate) {
         accountService.openSavingsAccount(clientId, accountNumber, initialBalance, interestRate);
     }

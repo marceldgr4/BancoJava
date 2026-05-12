@@ -7,21 +7,43 @@ import com.Banco.model.domain.Person.Client;
 import com.Banco.model.domain.Employee.Cashier;
 import com.Banco.model.domain.Employee.Supervisor;
 import com.Banco.service.BankService;
+import com.Banco.view.BankApp;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class AppBanco {
+    private static void startInterestScheduler(BankService service) {
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+        // Para producción: TimeUnit.DAYS, 30
+        // Para demostración: TimeUnit.MINUTES, 1
+        scheduler.scheduleAtFixedRate(
+                () -> {
+                    service.accounts().applyMonthlyInterestToAllSavings();
+                    System.out.println("[Scheduler] Monthly interest applied: "
+                            + LocalDateTime.now());
+                },
+                30, 30, TimeUnit.DAYS
+        );
+    }
     public static void main(String[] args) {
         BankService service = new BankService();
         BankController controller = new BankController(service);
 
-        seedDemoData(controller, service);
-        startInterestScheduler(controller);
+        seedDemoData(service, controller);
+        //seedDemoData(controller, service);
+        //startInterestScheduler(controller);
+        startInterestScheduler(service);
 
         SwingUtilities.invokeLater(()->{
             applyLookAndFeel();
-            com.Banco.view.BankApp app = new com.Banco.view.BankApp(controller);
-            app.setVisible(true);
+            //BankApp app =
+                    new BankApp(controller).setVisible(true);
+            //app.setVisible(true);
         });
     }
 
@@ -37,7 +59,7 @@ public class AppBanco {
         }, 1, 30, java.util.concurrent.TimeUnit.DAYS); // In a real app this would be monthly, we use 30 days. For demo purposes we can use seconds, but let's stick to days.
     }
 
-    private static void seedDemoData(BankController controller, BankService service) {
+    private static void seedDemoData(BankService service, BankController controller) {
         // Create an investment company
         InvestmentCompany company = new InvestmentCompany("INV001", "Global Investments", 0.08, 2, 0.95);
         service.addCompany(company);
