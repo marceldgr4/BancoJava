@@ -3,16 +3,15 @@ package com.Banco.model.domain.Person;
 import java.util.Objects;
 
 public abstract class Person {
-    private String id;
+    private final int id;
     private String fullName;
 
-    protected Person(String id, String fullName) {
-        if (id == null || id.isBlank()) throw new IllegalArgumentException(
-                "Person id  must not be blank."
-        );
-        if (fullName == null || fullName.isBlank()) throw new IllegalArgumentException(
-                "name must not be blank"
-        );
+    protected Person(int id, String fullName) {
+        if (id <= 0)
+            throw new IllegalArgumentException("Person id must be a positive integer, got: " + id);
+
+        if (fullName == null || fullName.isBlank())
+            throw new IllegalArgumentException("Full name must not be blank");
 
         this.id = id;
         this.fullName = fullName;
@@ -27,7 +26,8 @@ public abstract class Person {
     }
 
     public void setFullName(String fullName) {
-        if (fullName == null || fullName.isBlank()) throw new IllegalArgumentException("name must not be blank.");
+        if (fullName == null || fullName.isBlank())
+            throw new IllegalArgumentException(" full name must not be blank.");
         this.fullName = fullName;
     }
 
@@ -35,9 +35,8 @@ public abstract class Person {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Person other)) return false;
-        return id.equals(other.id);
-    }
-
+        return Objects.equals(id, other.id);
+}
     @Override
     public int hashCode() {
         return Objects.hash(id);
@@ -45,6 +44,6 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        return String.format("Person [id=%s, fullName=%s]", getClass().getSimpleName(), id, fullName);
+        return String.format("%s[id=%s, name=%s]", getClass().getSimpleName(), id, fullName);
     }
 }

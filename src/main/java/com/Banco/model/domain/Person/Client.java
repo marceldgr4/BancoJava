@@ -10,7 +10,7 @@ public class Client extends Person {
     private static int clientCount = 0;
     private final List<BankAccount> accounts =new ArrayList<>();
 
-    public Client(String id, String fullName){
+    public Client(int id, String fullName){
         super(id, fullName);
         clientCount++;
     }
@@ -22,7 +22,8 @@ public class Client extends Person {
         clientCount = 0;
     }
     public void addAccount(BankAccount account){
-        if (account == null) throw new IllegalArgumentException("Account cannot be null");
+        if (account == null)
+            throw new IllegalArgumentException("Account cannot be null");
             accounts.add(account);
         }
 
