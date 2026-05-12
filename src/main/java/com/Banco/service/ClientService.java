@@ -40,5 +40,8 @@ public class ClientService {
         return clientRepository.count();
     }
 
+    public int generateNextClientId() {
+        return clientRepository.generateNextId();
+    }
 
 }

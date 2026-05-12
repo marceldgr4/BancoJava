@@ -8,8 +8,11 @@ public class ClientController {
     public ClientController(ClientService clientService) {
         this.clientService = clientService;
     }
-    public void registerClient(int id, String fullName){
-        clientService.addClient(new Client(id,fullName));
+    public Client registerClient(String fullName){
+        int nextId = clientService.generateNextClientId();
+        Client newClient = new Client(nextId, fullName);
+        clientService.addClient(newClient);
+        return newClient;
     }
     public Client getClientById(int id){
         return clientService.getClientById(id);
