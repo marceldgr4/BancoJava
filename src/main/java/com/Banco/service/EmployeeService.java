@@ -19,18 +19,18 @@ public class EmployeeService {
             throw new IllegalArgumentException("Employee must  not  be null");
         if (employeeRepository.existsById(employee.getId()))
             throw new IllegalArgumentException("Employee winth ID'"+employee.getId()+ "'already exists");
-        employeeRepository.Save(employee);
+        employeeRepository.save(employee);
     }
     public  Optional<Employee> findEmploteeById(int id){
-        return employeeRepository.FindById(id);
+        return employeeRepository.findById(id);
     }
     public Employee getEmployeeById(int id){
-        return employeeRepository.FindById(id)
+        return employeeRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("Employee not found with id"+id));
     }
 
     public List<Employee> getAllEmployees(){
-        return employeeRepository.FindAll();
+        return employeeRepository.findAll();
     }
 
     public int getVacationDay(int employeeId){

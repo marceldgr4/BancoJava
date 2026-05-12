@@ -1,6 +1,7 @@
 package com.Banco.util;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 public final class CurrencyFormatter {
 
