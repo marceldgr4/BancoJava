@@ -2,6 +2,7 @@ package com.Banco.service;
 
 import com.Banco.model.Investment.InvestmentCompany;
 import com.Banco.repository.*;
+import com.Banco.repository.CompanyRepository;
 
 import java.util.List;
 import java.util.Optional;
