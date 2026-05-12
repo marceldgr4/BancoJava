@@ -1,4 +1,4 @@
-package com.Banco.view;
+package com.Banco.view.componet;
 
 import com.Banco.controller.BankController;
 import com.Banco.util.UIUtils;

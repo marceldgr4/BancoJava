@@ -3,6 +3,7 @@ package com.Banco.model.domain.Person;
 
 
 import com.Banco.model.domain.Account.BankAccount;
+import com.Banco.util.validator.BaseValidator;
 
 import java.util.*;
 
@@ -15,15 +16,17 @@ public class Client extends Person {
         clientCount++;
     }
 
+
     public static int getClientCount() {
         return clientCount;
     }
+
     static void setClientCount() {
         clientCount = 0;
     }
+
     public void addAccount(BankAccount account){
-        if (account == null)
-            throw new IllegalArgumentException("Account cannot be null");
+        BaseValidator.requireNonNull(account,"Account");
             accounts.add(account);
     }
 
@@ -40,6 +43,13 @@ public class Client extends Person {
                     .filter(a -> a.getAccountNumber().equals(accountNumber))
                     .findFirst();
         }
+        public boolean ownsAccount(String accountNumber) {
+            return getAccountByNumber(accountNumber).isPresent();
+        }
+        public int getAccountCount() {
+            return accounts.size();
+        }
+
         @Override
         public String toString(){
         return String.format("Client[id=%s, name=%s, accounts=%d]",

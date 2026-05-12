@@ -1,8 +1,9 @@
-package com.Banco.view;
+package com.Banco.view.panel;
 
 import com.Banco.controller.BankController;
 import com.Banco.model.domain.Account.SavingsAccount;
 import com.Banco.model.domain.Person.Client;
+import com.Banco.view.base.BaseTablePanel;
 
 import javax.swing.*;
 

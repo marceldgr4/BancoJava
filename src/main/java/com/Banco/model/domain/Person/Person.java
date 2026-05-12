@@ -1,5 +1,9 @@
 package com.Banco.model.domain.Person;
 
+
+import com.Banco.util.validator.BaseValidator;
+import com.Banco.util.validator.InputValidator;
+
 import java.util.Objects;
 
 public abstract class Person {
@@ -7,11 +11,8 @@ public abstract class Person {
     private String fullName;
 
     protected Person(int id, String fullName) {
-        if (id <= 0)
-            throw new IllegalArgumentException("Person id must be a positive integer, got: " + id);
-
-        if (fullName == null || fullName.isBlank())
-            throw new IllegalArgumentException("Full name must not be blank");
+       BaseValidator.requirePositive(id,"Person ID");
+        InputValidator.validateName(fullName);
 
         this.id = id;
         this.fullName = fullName;
@@ -26,9 +27,8 @@ public abstract class Person {
     }
 
     public void setFullName(String fullName) {
-        if (fullName == null || fullName.isBlank())
-            throw new IllegalArgumentException(" full name must not be blank.");
-        this.fullName = fullName;
+        InputValidator.validateName(fullName);
+          this.fullName = fullName;
     }
 
     @Override

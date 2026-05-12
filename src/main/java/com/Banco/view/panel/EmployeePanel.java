@@ -1,9 +1,10 @@
-package com.Banco.view;
+package com.Banco.view.panel;
 
 import com.Banco.controller.BankController;
 import com.Banco.model.domain.Employee.Cashier;
 import com.Banco.model.domain.Employee.Receptionist;
 import com.Banco.model.domain.Employee.Supervisor;
+import com.Banco.view.base.BaseTablePanel;
 
 import javax.swing.*;
 

@@ -2,7 +2,8 @@ package com.Banco;
 
 import com.Banco.controller.BankController;
 import com.Banco.util.UIUtils;
-import com.Banco.view.*;
+import com.Banco.view.componet.StatusBar;
+import com.Banco.view.panel.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
