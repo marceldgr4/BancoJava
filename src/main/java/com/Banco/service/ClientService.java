@@ -20,15 +20,15 @@ public class ClientService {
             throw new IllegalArgumentException("client cannot be null");
         if (clientRepository.existsById(client.getId()))
             throw new IllegalArgumentException("client with ID'" + client.getId() + "' exists");
-        clientRepository.Save(client);
+        clientRepository.save(client);
     }
 
     public Optional<Client> findClientById(int clientId){
-        return clientRepository.FindById(clientId);
+        return clientRepository.findById(clientId);
     }
 
     public Client getClientById(int clientId){
-        return clientRepository.FindById(clientId).orElseThrow(() -> new ClientNotFoundException(clientId));
+        return clientRepository.findById(clientId).orElseThrow(() -> new ClientNotFoundException(clientId));
     }
 
     public List<Client> getAllClients(){

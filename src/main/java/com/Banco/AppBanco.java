@@ -32,15 +32,15 @@ public class AppBanco {
 
         // Create a client
         Client client = new Client(1, "John Doe");
-        service.clients().registerClient(client);
+        service.clients().addClient(client);
 
         // Create a savings account for the client
         SavingsAccount savings = new SavingsAccount("SA001", client, 1500.0, 0.05);
-        service.accounts().registerAccount(savings);
+        service.accounts().openAccount(1,savings);
 
         // Create employees
-        service.employees().registerEmployee(new Cashier(101, "Alice Smith", 2500.0, 3));
-        service.employees().registerEmployee(new Supervisor(102, "Bob Jones", 4500.0, 10));
+        service.employees().addEmployee(new Cashier(101, "Alice Smith", 2500.0, 3));
+        service.employees().addEmployee(new Supervisor(102, "Bob Jones", 4500.0, 10));
     }
 
     private static void applyLookAndFeel() {

@@ -29,15 +29,16 @@ public class AccountService {
      this.clientRepository = clientRepository;
  }
  public  void openAccount(int clientId, BankAccount bankAccount) {
-     if (bankAccount == null) {
+     if (bankAccount == null)
          throw new IllegalArgumentException("BankAccount cannot be null");
+
          Client client = clientRepository.findById(clientId)
                  .orElseThrow(() -> new ClientNotFoundException(clientId));
          if (accountRepository.existsByAccountNumber(bankAccount.getAccountNumber()))
              throw new IllegalArgumentException("Account number '" + bankAccount.getAccountNumber() + "' already exists.");
          client.addAccount(bankAccount);
 
-     }
+
  }
      public Optional<BankAccount> findByAccountNumber(String accountNumber) {
          return accountRepository.findByAccountNumber(accountNumber);

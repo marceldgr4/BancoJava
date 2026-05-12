@@ -24,11 +24,11 @@ public class BankApp extends JFrame {
         // Header
         JPanel header = new JPanel();
         header.setBackground(new Color(41, 128, 185));
-        header.setPreferredSize(new Dimension(800, 60),
-        JLabel title = new JLabel("Banking System Management"),
-        title.setForeground(Color.WHITE),
-        title.setFont(new Font("Segoe UI", Font.BOLD, 24)),
-        header.add(title),
+        header.setPreferredSize(new Dimension(800, 60));
+        JLabel title = new JLabel("Banking System Management");
+        title.setForeground(Color.WHITE);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        header.add(title);
         add(header, BorderLayout.NORTH);
 
         // Content Area
