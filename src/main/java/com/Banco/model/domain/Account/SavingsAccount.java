@@ -1,11 +1,12 @@
 package com.Banco.model.domain.Account;
 
-import com.Banco.model.Emun.TransactionType;
+import com.Banco.model.type.TransactionType;
 import com.Banco.model.domain.Person.Client;
+import com.Banco.util.Constants;
 
 public class SavingsAccount extends BankAccount {
-    public static final double MINIMUM_INITIAL_DEPOSIT = 1000.00;
-    public static final double MINIMUM_BALANCE = 500.00;
+    public static final double MINIMUM_INITIAL_DEPOSIT = Constants.SAVINGS_MINIMUM_INITIAL;
+    public static final double MINIMUM_BALANCE = Constants.SAVINGS_MINIMUM_BALANCE;
 
     private double annualInterestRate;
 

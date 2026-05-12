@@ -1,6 +1,6 @@
 package com.Banco.model.domain.Employee;
 
-import com.Banco.model.Emun.EmployeeType;
+import com.Banco.model.type.EmployeeType;
 
 public class Supervisor extends Employee {
     public Supervisor(int id, String fullname, double salary, int yearsWorked) {

@@ -1,7 +1,8 @@
 package com.Banco.service;
 
-import com.Banco.execption.AccountNotFoundException;
-import com.Banco.execption.ClientNotFoundException;
+import com.Banco.exceptions.AccountNotFoundException;
+import com.Banco.exceptions.ClientNotFoundException;
+import com.Banco.exceptions.DuplicateResourceException;
 import com.Banco.model.domain.Account.BankAccount;
 import com.Banco.model.domain.Account.InvestmentAccount;
 import com.Banco.model.domain.Account.SavingsAccount;
@@ -19,7 +20,7 @@ public class AccountService {
 
  public AccountService(AccountRepository accountRepository, ClientRepository clientRepository){
      if (accountRepository ==null){
-         throw new IllegalArgumentException("AccountRepositori cannot be null");
+      throw new IllegalArgumentException("AccountRepository cannot be null");
      }
      if (clientRepository==null){
          throw new IllegalArgumentException("ClientRepository cannot be null");
@@ -34,8 +35,8 @@ public class AccountService {
 
          Client client = clientRepository.findById(clientId)
                  .orElseThrow(() -> new ClientNotFoundException(clientId));
-         if (accountRepository.existsByAccountNumber(bankAccount.getAccountNumber()))
-             throw new IllegalArgumentException("Account number '" + bankAccount.getAccountNumber() + "' already exists.");
+          if (accountRepository.existsByAccountNumber(bankAccount.getAccountNumber()))
+              throw new DuplicateResourceException("Account number '" + bankAccount.getAccountNumber() + "' already exists.");
          client.addAccount(bankAccount);
 
 
@@ -60,7 +61,7 @@ public class AccountService {
                     "Account '" + accountNumber + "' is not an InvestmentAccount.");
         return investmentAccount.fullWithdraw();
     }
-    public void applyMonthInterestToAllSaving(){
+    public void applyMonthlyInterestToAllSavings(){
      accountRepository.findAll().stream()
              .filter(a-> a instanceof SavingsAccount)
              .map(a->(SavingsAccount)a)

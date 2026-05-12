@@ -1,6 +1,6 @@
 package com.Banco.model.domain.Employee;
 
-import com.Banco.model.Emun.EmployeeType;
+import com.Banco.model.type.EmployeeType;
 
 public class Cashier extends Employee {
     public Cashier(int id, String fullName, double salary,
@@ -9,6 +9,6 @@ public class Cashier extends Employee {
     }
     @Override
     public EmployeeType getEmployeeType() {
-        return EmployeeType.CAJERO;
+        return EmployeeType.CASHIER;
     }
 }

@@ -17,6 +17,7 @@ public class BankService {
  private final AccountService accountService;
  private final EmployeeService employeeService;
  private final TransactionService transactionService;
+ private final ReportService reportService;
 
     public BankService() {
         this.clientRepository = new ClientRepository();
@@ -29,6 +30,7 @@ public class BankService {
         this.accountService = new AccountService(accountRepository,clientRepository);
         this.employeeService = new EmployeeService(employeeRepository);
         this.transactionService = new TransactionService(transactionRepository);
+        this.reportService = new ReportService(clientService, employeeService, accountService, companyRepository);
     }
 
     public ClientService clients(){
@@ -42,6 +44,9 @@ public class BankService {
     }
     public TransactionService transactions(){
      return transactionService;
+    }
+    public ReportService reports(){
+     return reportService;
     }
 
     public void addCompany(InvestmentCompany company) {

@@ -1,12 +1,13 @@
 package com.Banco.model.domain.Account;
 
-import com.Banco.model.Emun.TransactionType;
+import com.Banco.model.type.TransactionType;
 import com.Banco.model.Investment.InvestmentCompany;
 import com.Banco.model.domain.Person.Client;
+import com.Banco.util.Constants;
 
 public class InvestmentAccount extends BankAccount {
-    public static final double MINIMUM_INITIAL_DEPOSIT = 25000.00;
-    public static final double MINIMUM_BALANCE = 10000.00;
+    public static final double MINIMUM_INITIAL_DEPOSIT = Constants.INVESTMENT_MINIMUM_INITIAL;
+    public static final double MINIMUM_BALANCE = Constants.INVESTMENT_MINIMUM_BALANCE;
 
     private InvestmentCompany company;
     private boolean cancelled = false;

@@ -10,28 +10,27 @@ public class BankController {
     private final ReportController reportController;
 
     public BankController(BankService bankService) {
-        if (bankService == null)
+        if (bankService == null) {
             throw new IllegalArgumentException("Bank service cannot be null.");
-
-            this.clientController = new ClientController(
-                    bankService.clients()
-            );
-            this.employeeController = new EmployeeController(
-                    bankService.employees()
-            );
-
-            this.accountController = new AccountController(
-                    bankService.accounts()
-            );
-            this.transactionController = new TransactionController(
-                    bankService.transactions()
-            );
-            this.reportController = new ReportController(
-                    bankService.clients(),
-                    bankService.employees(),
-                    bankService.accounts()
-            );
         }
+
+        this.clientController = new ClientController(
+                bankService.clients()
+        );
+        this.employeeController = new EmployeeController(
+                bankService.employees()
+        );
+
+        this.accountController = new AccountController(
+                bankService.accounts()
+        );
+        this.transactionController = new TransactionController(
+                bankService.transactions()
+        );
+        this.reportController = new ReportController(
+                bankService.reports()
+        );
+    }
         public ClientController      clients()      { return clientController; }
         public EmployeeController    employees()    { return employeeController; }
         public AccountController     accounts()     { return accountController; }

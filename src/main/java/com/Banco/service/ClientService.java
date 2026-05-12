@@ -1,6 +1,7 @@
 package com.Banco.service;
 
-import com.Banco.execption.ClientNotFoundException;
+import com.Banco.exceptions.ClientNotFoundException;
+import com.Banco.exceptions.DuplicateResourceException;
 import com.Banco.model.domain.Person.Client;
 import com.Banco.repository.ClientRepository;
 
@@ -19,7 +20,7 @@ public class ClientService {
         if (client == null)
             throw new IllegalArgumentException("client cannot be null");
         if (clientRepository.existsById(client.getId()))
-            throw new IllegalArgumentException("client with ID'" + client.getId() + "' exists");
+            throw new DuplicateResourceException("Client with ID '" + client.getId() + "' already exists");
         clientRepository.save(client);
     }
 

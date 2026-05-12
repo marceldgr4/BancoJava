@@ -1,8 +1,7 @@
 package com.Banco.model.Transaction;
 
-import com.Banco.model.Emun.TransactionType;
+import com.Banco.model.type.TransactionType;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Transaction {
