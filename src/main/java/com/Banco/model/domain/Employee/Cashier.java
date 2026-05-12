@@ -9,6 +9,6 @@ public class Cashier extends Employee {
     }
     @Override
     public EmployeeType getEmployeeType() {
-        return EmployeeType.CAJERO;
+        return EmployeeType.CASHIER;
     }
 }

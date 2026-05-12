@@ -8,6 +8,6 @@ public class Receptionist extends Employee {
     }
     @Override
     public EmployeeType getEmployeeType() {
-        return EmployeeType.RECEPCIONISTA;
+        return EmployeeType.RECEPTIONIST;
     }
 }
