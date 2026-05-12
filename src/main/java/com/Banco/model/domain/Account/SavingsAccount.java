@@ -1,28 +1,55 @@
 package com.Banco.model.domain.Account;
 
-public class SavingsAccount extends Account {
-    private double AnnualSavingsPercentage;
-    private double MonthlySavingsPercentage;
+import com.Banco.model.Emun.TransactionType;
+import com.Banco.model.domain.Person.Client;
 
-    public SavingsAccount(String accountNumber, Client owner, double Beginningbalance, double annualSavingsPercentage, double monthlySavingsPercentage) {
-        super(accountNumber, owner, Beginningbalance);
-        AnnualSavingsPercentage = annualSavingsPercentage;
-        MonthlySavingsPercentage = monthlySavingsPercentage;
+public class SavingsAccount extends BankAccount {
+    public static final double MINIMUM_INITIAL_DEPOSIT = 1000.00;
+    public static final double MINIMUM_BALANCE = 500.00;
+
+    private double annualInterestRate;
+
+    public SavingsAccount(String accountNumber, Client owner, double initialBalance, double annualInterestRate) {
+        super(accountNumber, owner, initialBalance);
+        validateInterestRate(annualInterestRate);
+        this.annualInterestRate = annualInterestRate;
     }
 
-    public double getAnnualSavingsPercentage() {
-        return AnnualSavingsPercentage;
+    public double getAnnualInterestRate() {
+        return annualInterestRate;
     }
 
-    public void setAnnualSavingsPercentage(double annualSavingsPercentage) {
-        AnnualSavingsPercentage = annualSavingsPercentage;
+    @Override
+    public boolean isWithdrawalValid(double amount) {
+        return (getBalance() - amount) >= MINIMUM_BALANCE;
     }
 
-    public double getMonthlySavingsPercentage() {
-        return MonthlySavingsPercentage;
+    @Override
+    public String getAccountType() {
+        return "Savings Account";
     }
 
-    public void setMonthlySavingsPercentage(double monthlySavingsPercentage) {
-        MonthlySavingsPercentage = monthlySavingsPercentage;
+    @Override
+    protected double getMinimumInitialBalance() {
+        return MINIMUM_INITIAL_DEPOSIT;
+    }
+
+    public void setAnnualInterestRate(double annualInterestRate) {
+        validateInterestRate(annualInterestRate);
+        this.annualInterestRate = annualInterestRate;
+    }
+
+    private static void validateInterestRate(double rate) {
+        if (rate < 0 || rate > 1)
+            throw new IllegalArgumentException("\"Annual interest rate must be between 0.0 and 1.0, got: " + rate);
+    }
+
+    public void applyMonthlyInterest() {
+        double monthlyRate = annualInterestRate / 12.0;
+        double interest =getBalance()*monthlyRate;
+        if (interest> 0){
+            setBalance(getBalance()+interest);
+            recordTransaction(TransactionType.INTEREST, interest);
+        }
     }
 }

@@ -4,26 +4,24 @@ import com.Banco.model.Emun.TransactionType;
 import com.Banco.model.Investment.InvestmentCompany;
 import com.Banco.model.domain.Person.Client;
 
-public class investorAccount extends BankAccount{
-    public static final double MINIMUN_INITIAL_DEPOSIT = 25000.00;
-    public static final double MINIMUN_BALANCE = 10000.00;
+public class InvestmentAccount extends BankAccount {
+    public static final double MINIMUM_INITIAL_DEPOSIT = 25000.00;
+    public static final double MINIMUM_BALANCE = 10000.00;
 
     private InvestmentCompany company;
-
     private boolean cancelled = false;
 
-    public investorAccount(String accountNumber, Client owner,
-                           double initiaBalance, InvestmentCompany company){
-        super(accountNumber, owner, initiaBalance);
+    public InvestmentAccount(String accountNumber, Client owner, double initialBalance, InvestmentCompany company) {
+        super(accountNumber, owner, initialBalance);
         this.company = company;
     }
 
     @Override
     protected boolean isWithdrawalValid(double amount) {
-        if(cancelled){
-            return  amount <= getBalance();
+        if (cancelled) {
+            return amount <= getBalance();
         }
-        return (getBalance() - amount) >= MINIMUN_BALANCE;
+        return (getBalance() - amount) >= MINIMUM_BALANCE;
     }
 
     @Override
@@ -33,11 +31,13 @@ public class investorAccount extends BankAccount{
 
     @Override
     protected double getMinimumInitialBalance() {
-        return MINIMUN_INITIAL_DEPOSIT;
+        return MINIMUM_INITIAL_DEPOSIT;
     }
-    public double fullWithdraw(){
-        if(cancelled)
-            throw new IllegalStateException("Account"+ getAccountNumber()+ "is Already cancelled");
+
+    public double fullWithdraw() {
+        if (cancelled)
+            throw new IllegalStateException("Account " + getAccountNumber() + " is already cancelled");
+        
         cancelled = true;
         double total = getBalance();
         setBalance(0);
@@ -52,7 +52,8 @@ public class investorAccount extends BankAccount{
     public void setCompany(InvestmentCompany company) {
         this.company = company;
     }
-    public boolean isCancelled(){
+
+    public boolean isCancelled() {
         return cancelled;
     }
 

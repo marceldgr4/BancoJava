@@ -51,7 +51,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.banco.AppBanco</mainClass>
+                            <mainClass>com.Banco.AppBanco</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
