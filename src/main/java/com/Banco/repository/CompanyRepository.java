@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class CompanyRepository {
-    public final List<InvestmentCompany> store =new ArrayList<>();
+    private final List<InvestmentCompany> store = new ArrayList<>();
 
     public void save(InvestmentCompany investmentCompany) {
         if (investmentCompany == null)

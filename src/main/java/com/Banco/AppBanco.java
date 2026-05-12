@@ -3,7 +3,6 @@ package com.Banco;
 import com.Banco.controller.BankController;
 import com.Banco.model.Investment.InvestmentCompany;
 
-import com.Banco.model.domain.Account.SavingsAccount;
 import com.Banco.model.domain.Person.Client;
 import com.Banco.model.domain.Employee.Cashier;
 import com.Banco.model.domain.Employee.Supervisor;
@@ -16,16 +15,29 @@ public class AppBanco {
         BankService service = new BankService();
         BankController controller = new BankController(service);
 
-        seedDemoData(service);
+        seedDemoData(controller, service);
+        startInterestScheduler(controller);
 
         SwingUtilities.invokeLater(()->{
             applyLookAndFeel();
-            BankApp app = new BankApp(controller);
+            com.Banco.view.BankApp app = new com.Banco.view.BankApp(controller);
             app.setVisible(true);
         });
     }
 
-    private static void seedDemoData(BankService service) {
+    private static void startInterestScheduler(BankController controller) {
+        java.util.concurrent.ScheduledExecutorService scheduler = java.util.concurrent.Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                controller.accounts().applyMonthlyInterest();
+                System.out.println("Monthly interests applied.");
+            } catch (Exception e) {
+                System.err.println("Error applying interests: " + e.getMessage());
+            }
+        }, 1, 30, java.util.concurrent.TimeUnit.DAYS); // In a real app this would be monthly, we use 30 days. For demo purposes we can use seconds, but let's stick to days.
+    }
+
+    private static void seedDemoData(BankController controller, BankService service) {
         // Create an investment company
         InvestmentCompany company = new InvestmentCompany("INV001", "Global Investments", 0.08, 2, 0.95);
         service.addCompany(company);
@@ -34,9 +46,8 @@ public class AppBanco {
         Client client = new Client(1, "John Doe");
         service.clients().addClient(client);
 
-        // Create a savings account for the client
-        SavingsAccount savings = new SavingsAccount("SA001", client, 1500.0, 0.05);
-        service.accounts().openAccount(1,savings);
+        // Create a savings account for the client using controller
+        controller.accounts().openSavingsAccount(1, "SA001", 1000.0, 0.05);
 
         // Create employees
         service.employees().addEmployee(new Cashier(101, "Alice Smith", 2500.0, 3));

@@ -55,8 +55,7 @@ public class AccountPanel extends BaseTablePanel {
             if (rateStr == null || rateStr.trim().isEmpty()) return;
             double rate = Double.parseDouble(rateStr);
 
-            SavingsAccount acc = new SavingsAccount(accNum, client, initBal, rate);
-            controller.accounts().openAccount(clientId, acc);
+            controller.accounts().openSavingsAccount(clientId, accNum, initBal, rate);
 
             refreshData();
             JOptionPane.showMessageDialog(this, "Account opened successfully.");
@@ -73,15 +72,18 @@ public class AccountPanel extends BaseTablePanel {
         }
         String accNum = (String) tableModel.getValueAt(selectedRow, 0);
         String amountStr = JOptionPane.showInputDialog(this, "Enter Deposit Amount:");
-        if (amountStr != null && !amountStr.trim().isEmpty()) {
-            try {
-                double amount = Double.parseDouble(amountStr);
-                controller.accounts().deposit(accNum, amount);
-                refreshData();
-                JOptionPane.showMessageDialog(this, "Deposit successful.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        if (amountStr == null || amountStr.trim().isEmpty()) return;
+        String clientIdStr = JOptionPane.showInputDialog(this, "Enter Client ID:");
+        if (clientIdStr == null || clientIdStr.trim().isEmpty()) return;
+        int clientId = Integer.parseInt(clientIdStr);
+
+        try {
+            double amount = Double.parseDouble(amountStr);
+            controller.accounts().deposit(clientId, accNum, amount);
+            refreshData();
+            JOptionPane.showMessageDialog(this, "Deposit successful.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -93,15 +95,18 @@ public class AccountPanel extends BaseTablePanel {
         }
         String accNum = (String) tableModel.getValueAt(selectedRow, 0);
         String amountStr = JOptionPane.showInputDialog(this, "Enter Withdrawal Amount:");
-        if (amountStr != null && !amountStr.trim().isEmpty()) {
-            try {
-                double amount = Double.parseDouble(amountStr);
-                controller.accounts().withdraw(accNum, amount);
-                refreshData();
-                JOptionPane.showMessageDialog(this, "Withdrawal successful.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
+        if (amountStr == null || amountStr.trim().isEmpty()) return;
+        String clientIdStr = JOptionPane.showInputDialog(this, "Enter Client ID:");
+        if (clientIdStr == null || clientIdStr.trim().isEmpty()) return;
+        int clientId = Integer.parseInt(clientIdStr);
+
+        try {
+            double amount = Double.parseDouble(amountStr);
+            controller.accounts().withdraw(clientId, accNum, amount);
+            refreshData();
+            JOptionPane.showMessageDialog(this, "Withdrawal successful.");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 

@@ -29,17 +29,30 @@ public class AccountService {
      this.accountRepository = accountRepository;
      this.clientRepository = clientRepository;
  }
- public  void openAccount(int clientId, BankAccount bankAccount) {
+ public void openAccount(int clientId, BankAccount bankAccount) {
      if (bankAccount == null)
          throw new IllegalArgumentException("BankAccount cannot be null");
 
-         Client client = clientRepository.findById(clientId)
-                 .orElseThrow(() -> new ClientNotFoundException(clientId));
-          if (accountRepository.existsByAccountNumber(bankAccount.getAccountNumber()))
-              throw new DuplicateResourceException("Account number '" + bankAccount.getAccountNumber() + "' already exists.");
-         client.addAccount(bankAccount);
+     Client client = clientRepository.findById(clientId)
+             .orElseThrow(() -> new ClientNotFoundException(clientId));
+     if (accountRepository.existsByAccountNumber(bankAccount.getAccountNumber()))
+         throw new DuplicateResourceException("Account number '" + bankAccount.getAccountNumber() + "' already exists.");
+     client.addAccount(bankAccount);
+     accountRepository.save(bankAccount);
+ }
 
+ public void openSavingsAccount(int clientId, String accountNumber, double initialBalance, double interestRate) {
+     Client client = clientRepository.findById(clientId)
+             .orElseThrow(() -> new ClientNotFoundException(clientId));
+     SavingsAccount acc = new SavingsAccount(accountNumber, client, initialBalance, interestRate);
+     openAccount(clientId, acc);
+ }
 
+ public void openInvestmentAccount(int clientId, String accountNumber, double initialBalance, com.Banco.model.Investment.InvestmentCompany company) {
+     Client client = clientRepository.findById(clientId)
+             .orElseThrow(() -> new ClientNotFoundException(clientId));
+     InvestmentAccount acc = new InvestmentAccount(accountNumber, client, initialBalance, company);
+     openAccount(clientId, acc);
  }
      public Optional<BankAccount> findByAccountNumber(String accountNumber) {
          return accountRepository.findByAccountNumber(accountNumber);
@@ -47,11 +60,19 @@ public class AccountService {
      public BankAccount getByAccountNumber(String accountNumber) {
      return accountRepository.findByAccountNumber(accountNumber).orElseThrow(()-> new AccountNotFoundException(accountNumber));
      }
-     public void deposit(String accountNumber, double amount) {
-     getByAccountNumber(accountNumber).deposit(amount);
+     public void deposit(int clientId, String accountNumber, double amount) {
+         BankAccount account = getByAccountNumber(accountNumber);
+         if (account.getOwner().getId() != clientId) {
+             throw new com.Banco.exceptions.AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
+         }
+         account.deposit(amount);
      }
-     public void withdraw(String accountNumber, double amount) {
-     getByAccountNumber(accountNumber).withdraw(amount);
+     public void withdraw(int clientId, String accountNumber, double amount) {
+         BankAccount account = getByAccountNumber(accountNumber);
+         if (account.getOwner().getId() != clientId) {
+             throw new com.Banco.exceptions.AccountOwnershipException(clientId, accountNumber, account.getOwner().getId());
+         }
+         account.withdraw(amount);
      }
 
     public double fullWithdraw(String accountNumber) {

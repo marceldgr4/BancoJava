@@ -12,6 +12,7 @@ public class SavingsAccount extends BankAccount {
 
     public SavingsAccount(String accountNumber, Client owner, double initialBalance, double annualInterestRate) {
         super(accountNumber, owner, initialBalance);
+        com.Banco.util.validator.AccountValidator.validateSavingsInitialDeposit(initialBalance);
         validateInterestRate(annualInterestRate);
         this.annualInterestRate = annualInterestRate;
     }
