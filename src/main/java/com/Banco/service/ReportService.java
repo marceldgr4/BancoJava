@@ -3,6 +3,10 @@ package com.Banco.service;
 import com.Banco.model.domain.Account.BankAccount;
 import com.Banco.model.domain.Employee.Employee;
 import com.Banco.model.domain.Person.Client;
+import com.Banco.repository.CompanyRepository;
+import com.Banco.model.domain.Account.SavingsAccount;
+import com.Banco.model.domain.Account.InvestmentAccount;
+import com.Banco.model.Investment.InvestmentCompany;
 
 import java.util.List;
 
@@ -10,9 +14,9 @@ public class ReportService {
     private final ClientService clientService;
     private final EmployeeService employeeService;
     private final AccountService accountService;
-    private final com.Banco.repository.CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    public ReportService(ClientService clientService, EmployeeService employeeService, AccountService accountService, com.Banco.repository.CompanyRepository companyRepository) {
+    public ReportService(ClientService clientService, EmployeeService employeeService, AccountService accountService, CompanyRepository companyRepository) {
         this.clientService = clientService;
         this.employeeService = employeeService;
         this.accountService = accountService;
@@ -59,15 +63,30 @@ public class ReportService {
         return sb.toString();
     }
 
+    public String generateCompaniesReport() {
+        List<InvestmentCompany> companies = companyRepository.findAll();
+        StringBuilder sb = new StringBuilder();
+        sb.append("══════════ INVESTMENT COMPANIES REPORT ══════════\n");
+        sb.append("Total companies: ").append(companies.size()).append("\n\n");
+        companies.forEach(c ->
+                sb.append(String.format("[%s] %s | Risk: %s | Return: %.1f%% | Reliability: %.0f%%\n",
+                        c.getCode(), c.getName(), c.getRiskDescription(),
+                        c.getReturnPercentage() * 100, c.getReliability() * 100))
+        );
+        return sb.toString();
+    }
+
     public String generateSystemSummary() {
         return String.format(
                 "══════════ SYSTEM SUMMARY ══════════\n" +
-                        "  Clients:   %d\n" +
-                        "  Employees: %d\n" +
-                        "  Accounts:  %d\n",
+                        "  Clients:     %d\n" +
+                        "  Employees:   %d\n" +
+                        "  Accounts:    %d\n" +
+                        "  Companies:   %d\n",
                 clientService.getTotalClients(),
                 employeeService.getTotalEmployees(),
-                accountService.getAllAccounts().size()
+                accountService.getAllAccounts().size(),
+                companyRepository.findAll().size()
         );
     }
 
@@ -111,9 +130,9 @@ public class ReportService {
             data[i][3] = String.format("$%.2f", a.getBalance());
             
             String details = "N/A";
-            if (a instanceof com.Banco.model.domain.Account.SavingsAccount sa) {
+            if (a instanceof SavingsAccount sa) {
                 details = String.format("Interest Rate: %.1f%%", sa.getAnnualInterestRate() * 100);
-            } else if (a instanceof com.Banco.model.domain.Account.InvestmentAccount ia) {
+            } else if (a instanceof InvestmentAccount ia) {
                 details = ia.getCompany() != null ? "Company: " + ia.getCompany().getName() : "Company: None";
             }
             data[i][4] = details;
@@ -122,10 +141,10 @@ public class ReportService {
     }
 
     public Object[][] getCompaniesTableData() {
-        List<com.Banco.model.Investment.InvestmentCompany> companies = companyRepository.findAll();
+        List<InvestmentCompany> companies = companyRepository.findAll();
         Object[][] data = new Object[companies.size()][5];
         for (int i = 0; i < companies.size(); i++) {
-            com.Banco.model.Investment.InvestmentCompany c = companies.get(i);
+            InvestmentCompany c = companies.get(i);
             data[i][0] = c.getCode();
             data[i][1] = c.getName();
             data[i][2] = c.getRiskDescription();

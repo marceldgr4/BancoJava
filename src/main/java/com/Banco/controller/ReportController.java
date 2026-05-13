@@ -22,6 +22,10 @@ public class ReportController {
         return reportService.generateAccountsReport();
     }
 
+    public String generateCompaniesReport() {
+        return reportService.generateCompaniesReport();
+    }
+
     public String generateSystemSummary() {
         return reportService.generateSystemSummary();
     }

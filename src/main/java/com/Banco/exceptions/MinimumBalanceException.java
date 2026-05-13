@@ -11,7 +11,7 @@ public class MinimumBalanceException extends BankingException{
     public MinimumBalanceException(String accountNumber, String accountType, double currentBalance, double minimumRequired, double attemptedWithdrawal) {
         super(String.format(
                 "%s %s: Cannot withdraw $%.2f. Current balance $%.2f would fall below required minimum $%.2f",
-                accountNumber, accountType, currentBalance, minimumRequired
+                accountNumber, accountType, attemptedWithdrawal, currentBalance, minimumRequired
         ));
         this.accountNumber = accountNumber;
         this.accountType = accountType;

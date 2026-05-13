@@ -32,4 +32,7 @@ public class ClientRepository {
     public int count() {
         return store.size();
     }
+    public int generateNextId() {
+        return store.stream().mapToInt(Client::getId).max().orElse(0) + 1;
+    }
 }

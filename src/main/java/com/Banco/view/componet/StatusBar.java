@@ -26,9 +26,9 @@ public class StatusBar extends JPanel {
 
     public void updateStatus() {
         int clients = controller.clients().getTotalClients();
-        int accounts = controller.accounts().getClientAccounts(-1).size(); // Just a fallback if needed, but better to use report data length
+        int accounts = controller.reports().getAccountsData().length;
         int tx = controller.transactions().getAllTransactions().size();
         
-        statusLabel.setText(String.format("System Status: %d Clients | %d Transactions processed", clients, tx));
+        statusLabel.setText(String.format("System Status: %d Clients | %d Accounts | %d Transactions", clients, accounts, tx));
     }
 }

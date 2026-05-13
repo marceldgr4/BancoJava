@@ -14,6 +14,7 @@ public class InvestmentAccount extends BankAccount {
 
     public InvestmentAccount(String accountNumber, Client owner, double initialBalance, InvestmentCompany company) {
         super(accountNumber, owner, initialBalance);
+        com.Banco.util.validator.AccountValidator.validateInvestmentInitialDeposit(initialBalance);
         this.company = company;
     }
 

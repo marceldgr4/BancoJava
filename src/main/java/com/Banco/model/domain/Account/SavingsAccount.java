@@ -1,8 +1,11 @@
 package com.Banco.model.domain.Account;
 
+import com.Banco.exceptions.InvalidTransactionException;
 import com.Banco.model.type.TransactionType;
 import com.Banco.model.domain.Person.Client;
 import com.Banco.util.Constants;
+
+import static com.Banco.util.validator.AccountValidator.validateSavingsInitialDeposit;
 
 public class SavingsAccount extends BankAccount {
     public static final double MINIMUM_INITIAL_DEPOSIT = Constants.SAVINGS_MINIMUM_INITIAL;
@@ -12,6 +15,13 @@ public class SavingsAccount extends BankAccount {
 
     public SavingsAccount(String accountNumber, Client owner, double initialBalance, double annualInterestRate) {
         super(accountNumber, owner, initialBalance);
+
+        if (initialBalance != MINIMUM_INITIAL_DEPOSIT) {
+            throw new InvalidTransactionException(
+                    String.format("First deposit must be EXACTLY $%.2f, got: $%.2f",
+                            MINIMUM_INITIAL_DEPOSIT, initialBalance)
+            );
+        }
         validateInterestRate(annualInterestRate);
         this.annualInterestRate = annualInterestRate;
     }
