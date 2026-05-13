@@ -11,6 +11,7 @@ public class BankController {
     private final ClientController      clientController;
     private final EmployeeController    employeeController;
     private final AccountController     accountController;
+    private final CompanyController      companyController;
     private final TransactionController transactionController;
     private final ReportController      reportController;
 
@@ -22,6 +23,7 @@ public class BankController {
         this.clientController      = new ClientController(bankService.clients());
         this.employeeController    = new EmployeeController(bankService.employees());
         this.accountController     = new AccountController(bankService.accounts());
+        this.companyController      = new CompanyController(bankService.companies());
         this.transactionController = new TransactionController(bankService.transactions());
         this.reportController      = new ReportController(bankService.reports());
     }
@@ -30,6 +32,7 @@ public class BankController {
     public ClientController      clients()      { return clientController; }
     public EmployeeController    employees()    { return employeeController; }
     public AccountController     accounts()     { return accountController; }
+    public CompanyController     companies()    { return companyController; }
     public TransactionController transactions() { return transactionController; }
     public ReportController      reports()      { return reportController; }
 

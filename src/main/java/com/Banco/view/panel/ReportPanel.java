@@ -43,10 +43,14 @@ public class ReportPanel extends JPanel {
         JButton btnAccounts = new JButton("Accounts Report");
         btnAccounts.addActionListener(e -> summaryArea.setText(controller.reports().generateAccountsReport()));
 
+        JButton btnCompanies = new JButton("Investments Report");
+        btnCompanies.addActionListener(e -> summaryArea.setText(controller.reports().generateCompaniesReport()));
+
         btnPanel.add(btnSystem);
         btnPanel.add(btnClients);
         btnPanel.add(btnEmployees);
         btnPanel.add(btnAccounts);
+        btnPanel.add(btnCompanies);
 
         add(btnPanel, BorderLayout.SOUTH);
     }

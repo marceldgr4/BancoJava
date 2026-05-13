@@ -19,6 +19,7 @@ public class BankApp extends JFrame {
     private AccountPanel accountsPanel;
     private TransactionPanel transactionsPanel;
     private ReportPanel reportPanel;
+    private CompanyPanel investorsPanel;
     private StatusBar statusBar;
     private JPanel dashboardPanel;
 
@@ -75,6 +76,7 @@ public class BankApp extends JFrame {
         addSidebarButton(sidebar, "Employees", "EMPLOYEES");
         addSidebarButton(sidebar, "Accounts", "ACCOUNTS");
         addSidebarButton(sidebar, "Transactions", "TRANSACTIONS");
+        addSidebarButton(sidebar, "Investors", "INVESTORS");
         addSidebarButton(sidebar, "Reports", "REPORTS");
 
         sidebar.add(Box.createVerticalGlue());
@@ -118,6 +120,7 @@ public class BankApp extends JFrame {
         employeesPanel = new EmployeePanel(controller);
         accountsPanel = new AccountPanel(controller);
         transactionsPanel = new TransactionPanel(controller);
+        investorsPanel = new CompanyPanel(controller);
         reportPanel = new ReportPanel(controller);
 
         mainContent.add(dashboardPanel, "DASHBOARD");
@@ -125,6 +128,7 @@ public class BankApp extends JFrame {
         mainContent.add(employeesPanel, "EMPLOYEES");
         mainContent.add(accountsPanel, "ACCOUNTS");
         mainContent.add(transactionsPanel, "TRANSACTIONS");
+        mainContent.add(investorsPanel, "INVESTORS");
         mainContent.add(reportPanel, "REPORTS");
     }
 
@@ -139,6 +143,8 @@ public class BankApp extends JFrame {
             accountsPanel.refreshData();
         } else if (name.equals("TRANSACTIONS")) {
             transactionsPanel.refreshData();
+        } else if (name.equals("INVESTORS")) {
+            investorsPanel.refreshData();
         } else if (name.equals("REPORTS")) {
             reportPanel.refreshData();
         }
