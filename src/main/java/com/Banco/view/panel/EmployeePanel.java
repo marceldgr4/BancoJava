@@ -1,70 +1,97 @@
 package com.Banco.view.panel;
 
 import com.Banco.controller.BankController;
-import com.Banco.model.domain.Employee.Cashier;
-import com.Banco.model.domain.Employee.Receptionist;
-import com.Banco.model.domain.Employee.Supervisor;
 import com.Banco.view.base.BaseTablePanel;
 
 import javax.swing.*;
 
+
 public class EmployeePanel extends BaseTablePanel {
+
     private final BankController controller;
 
     public EmployeePanel(BankController controller) {
-        super("Employee Directory", new String[]{"ID", "Name", "Position", "Salary", "Years", "Vacations"});
+        super("Employee Directory",
+                new String[]{"ID", "Name", "Position", "Salary", "Years Worked", "Vacation Days"});
         this.controller = controller;
 
-        JButton btnAdd = new JButton("Register Employee");
-        btnAdd.addActionListener(e -> addEmployee());
+        JButton btnAdd     = new JButton("Register Employee");
         JButton btnRefresh = new JButton("Refresh");
+
+        btnAdd.addActionListener(e     -> addEmployee());
         btnRefresh.addActionListener(e -> refreshData());
 
         btnPanel.add(btnAdd);
         btnPanel.add(btnRefresh);
     }
 
+    // ── Register Employee ─────────────────────────────────────────────────────
+
     private void addEmployee() {
         try {
-            String[] options = {"Cashier", "Receptionist", "Supervisor"};
-            String type = (String) JOptionPane.showInputDialog(this, "Select Employee Type:", "Type",
-                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
+            String[] types = {"Cashier", "Supervisor", "Receptionist"};
+            String type = (String) JOptionPane.showInputDialog(
+                    this, "Select Employee Type:", "Employee Type",
+                    JOptionPane.QUESTION_MESSAGE, null, types, types[0]);
             if (type == null) return;
 
             String idStr = JOptionPane.showInputDialog(this, "Enter Employee ID:");
-            if (idStr == null || idStr.trim().isEmpty()) return;
-            int id = Integer.parseInt(idStr);
+            if (isBlankOrCancelled(idStr)) return;
+            int id = Integer.parseInt(idStr.trim());
 
             String name = JOptionPane.showInputDialog(this, "Enter Full Name:");
-            if (name == null || name.trim().isEmpty()) return;
+            if (isBlankOrCancelled(name)) return;
 
             String salaryStr = JOptionPane.showInputDialog(this, "Enter Salary:");
-            if (salaryStr == null || salaryStr.trim().isEmpty()) return;
-            double salary = Double.parseDouble(salaryStr);
+            if (isBlankOrCancelled(salaryStr)) return;
+            double salary = Double.parseDouble(salaryStr.trim());
 
             String yearsStr = JOptionPane.showInputDialog(this, "Enter Years Worked:");
-            if (yearsStr == null || yearsStr.trim().isEmpty()) return;
-            int years = Integer.parseInt(yearsStr);
+            if (isBlankOrCancelled(yearsStr)) return;
+            int years = Integer.parseInt(yearsStr.trim());
 
-            switch (type) {
-                case "Cashier" -> controller.employees().registerEmployee(new Cashier(id, name, salary, years));
-                case "Receptionist" -> controller.employees().registerEmployee(new Receptionist(id, name, salary, years));
-                case "Supervisor" -> controller.employees().registerEmployee(new Supervisor(id, name, salary, years));
-            }
+            // Controller factory methods — the view never imports concrete model classes
+            int vacationDays = switch (type) {
+                case "Cashier"       -> controller.employees()
+                        .registerCashier(id, name.trim(), salary, years)
+                        .calculateVacationDays();
+                case "Supervisor"    -> controller.employees()
+                        .registerSupervisor(id, name.trim(), salary, years)
+                        .calculateVacationDays();
+                case "Receptionist"  -> controller.employees()
+                        .registerReceptionist(id, name.trim(), salary, years)
+                        .calculateVacationDays();
+                default -> throw new IllegalArgumentException("Unknown type: " + type);
+            };
+
             refreshData();
-            JOptionPane.showMessageDialog(this, "Employee registered successfully.");
+            JOptionPane.showMessageDialog(this,
+                    String.format("%s registered successfully.\nVacation days this year: %d",
+                            type, vacationDays));
+        } catch (NumberFormatException ex) {
+            showError("Invalid number format: " + ex.getMessage());
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            showError(ex.getMessage());
         }
     }
+
+    // ── Refresh ───────────────────────────────────────────────────────────────
 
     @Override
     public void refreshData() {
         tableModel.setRowCount(0);
-        Object[][] data = controller.reports().getEmployeesData();
-        for (Object[] row : data) {
+        for (Object[] row : controller.reports().getEmployeesData()) {
             tableModel.addRow(row);
         }
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+
+    private boolean isBlankOrCancelled(String value) {
+        return value == null || value.isBlank();
+    }
+
+    private void showError(String message) {
+        JOptionPane.showMessageDialog(this, "Error: " + message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
