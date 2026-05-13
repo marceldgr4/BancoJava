@@ -23,16 +23,12 @@ public class ClientPanel extends BaseTablePanel {
 
     private void addClient() {
         try {
-            String idStr = JOptionPane.showInputDialog(this, "Enter Client ID:");
-            if (idStr == null || idStr.trim().isEmpty()) return;
-            int id = Integer.parseInt(idStr);
-
             String name = JOptionPane.showInputDialog(this, "Enter Full Name:");
             if (name == null || name.trim().isEmpty()) return;
 
-            controller.clients().registerClient(id, name);
+            com.Banco.model.domain.Person.Client newClient = controller.clients().registerClient(name);
             refreshData();
-            JOptionPane.showMessageDialog(this, "Client registered successfully.");
+            JOptionPane.showMessageDialog(this, "Client registered successfully with ID: " + newClient.getId());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
