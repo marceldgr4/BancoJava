@@ -63,15 +63,30 @@ public class ReportService {
         return sb.toString();
     }
 
+    public String generateCompaniesReport() {
+        List<InvestmentCompany> companies = companyRepository.findAll();
+        StringBuilder sb = new StringBuilder();
+        sb.append("══════════ INVESTMENT COMPANIES REPORT ══════════\n");
+        sb.append("Total companies: ").append(companies.size()).append("\n\n");
+        companies.forEach(c ->
+                sb.append(String.format("[%s] %s | Risk: %s | Return: %.1f%% | Reliability: %.0f%%\n",
+                        c.getCode(), c.getName(), c.getRiskDescription(),
+                        c.getReturnPercentage() * 100, c.getReliability() * 100))
+        );
+        return sb.toString();
+    }
+
     public String generateSystemSummary() {
         return String.format(
                 "══════════ SYSTEM SUMMARY ══════════\n" +
-                        "  Clients:   %d\n" +
-                        "  Employees: %d\n" +
-                        "  Accounts:  %d\n",
+                        "  Clients:     %d\n" +
+                        "  Employees:   %d\n" +
+                        "  Accounts:    %d\n" +
+                        "  Companies:   %d\n",
                 clientService.getTotalClients(),
                 employeeService.getTotalEmployees(),
-                accountService.getAllAccounts().size()
+                accountService.getAllAccounts().size(),
+                companyRepository.findAll().size()
         );
     }
 
