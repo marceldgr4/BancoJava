@@ -1,213 +1,366 @@
-C:\Users\Admin\.jdks\ms-21.0.11\bin\java.exe "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.3\lib\idea_rt.jar=49752" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath "C:\Users\Admin\OneDrive - Periferia IT Corp SAS\Documentos\CompraVenta\Banco\Banco\target\classes" com.Banco.BankDemoApp
-╔═══════════════════════════════════════════════════════════════╗
-║   DEMOSTRACIÓN DE PROGRAMACIÓN ORIENTADA A OBJETOS           ║
-║   Sistema Bancario - Evidencia de Clases y Objetos           ║
-╚═══════════════════════════════════════════════════════════════╝
+# 🏦 BancoJava — Sistema Bancario con Java Swing
 
-┌─────────────────────────────────────────────────────────────┐
-│ 1. DEMOSTRACIÓN DE HERENCIA                                 │
-└─────────────────────────────────────────────────────────────┘
+Sistema bancario de escritorio desarrollado en Java, con interfaz gráfica Swing y arquitectura MVC. Demuestra los cuatro pilares de la Programación Orientada a Objetos: herencia, polimorfismo, abstracción y encapsulamiento.
 
-► Person (clase abstracta padre)
-  ├── Client (hereda de Person)
-  └── Employee (hereda de Person)
-      ├── Cashier (hereda de Employee)
-      ├── Supervisor (hereda de Employee)
-      └── Receptionist (hereda de Employee)
+---
 
-✓ Cliente creado: Client[id=1001, name=María González, accounts=0]
-  → Hereda getId() y getFullName() de Person
+## 📋 Descripción
 
-✓ Empleados creados:
-  • Cajero: Pedro Martínez
-    → Hereda de Person: id=2001
-    → Hereda de Employee: calculateVacationDays() = 9 días
+Aplicación académica que simula las operaciones esenciales de un banco:
 
-  • Supervisor: Ana López
-    → Hereda de Person: id=2002
-    → Hereda de Employee: calculateVacationDays() = 20 días
+- Gestión de clientes y cuentas bancarias (ahorro e inversión)
+- Gestión de empleados con cálculo de vacaciones por antigüedad
+- Empresas inversoras con niveles de riesgo y retorno configurable
+- Aplicación automática de intereses mensuales mediante `ScheduledExecutorService`
+- Historial de transacciones por cuenta
+- Reportes del sistema en tiempo real
+- Demostración explícita de conceptos OOP mediante `BankDemoApp`
 
-  • Recepcionista: Carlos Ruiz
-    → Hereda de Person: id=2003
-    → Hereda de Employee: calculateVacationDays() = 5 días
+---
 
-─────────────────────────────────────────────────────────────
+## 🏗️ Arquitectura
 
-┌─────────────────────────────────────────────────────────────┐
-│ 2. DEMOSTRACIÓN DE POLIMORFISMO                             │
-└─────────────────────────────────────────────────────────────┘
+El proyecto sigue el patrón **MVC (Model-View-Controller)** con separación estricta de capas:
 
-► Uso de referencias del PADRE para objetos HIJO
+```
+src/main/java/com/Banco/
+│
+├── AppBanco.java                    ← Punto de entrada + Scheduler de intereses
+├── BankDemoApp.java                 ← Demostración completa de POO
+│
+├── model/
+│   ├── domain/
+│   │   ├── Person/
+│   │   │   ├── Person.java          ← Clase base abstracta
+│   │   │   └── Client.java          ← Hereda de Person
+│   │   ├── Employee/
+│   │   │   ├── Employee.java        ← Abstract: vacaciones por antigüedad
+│   │   │   ├── Cashier.java
+│   │   │   ├── Supervisor.java
+│   │   │   └── Receptionist.java
+│   │   └── Account/
+│   │       ├── BankAccount.java     ← Clase abstracta de cuenta
+│   │       ├── SavingsAccount.java  ← Ahorro con tasa de interés
+│   │       └── InvestmentAccount.java ← Inversión con nivel de riesgo
+│   ├── Investment/
+│   │   └── InvestmentCompany.java
+│   └── Transaction/
+│       └── Transaction.java
+│
+├── controller/
+│   ├── BankController.java          ← Fachada central para la Vista
+│   ├── AccountController.java
+│   ├── ClientController.java
+│   ├── EmployeeController.java
+│   ├── CompanyController.java
+│   ├── TransactionController.java
+│   └── ReportController.java
+│
+├── service/
+│   ├── BankService.java             ← Orquestación de servicios
+│   ├── AccountService.java
+│   ├── ClientService.java
+│   ├── EmployeeService.java
+│   ├── CompanyService.java
+│   ├── TransactionService.java
+│   └── ReportService.java
+│
+├── repository/
+│   ├── AccountRepository.java
+│   ├── ClientRepository.java
+│   ├── EmployeeRepository.java
+│   ├── CompanyRepository.java
+│   └── TransactionRepository.java
+│
+├── exceptions/
+│   ├── BankingException.java        ← Base de todas las excepciones
+│   ├── AccountOwnershipException.java
+│   ├── AccountNotFoundException.java
+│   ├── ClientNotFoundException.java
+│   ├── EmployeeNotFoundException.java
+│   ├── InsufficientFundsException.java
+│   ├── InvalidAmountException.java
+│   ├── InvalidTransactionException.java
+│   ├── InvalidWithdrawalException.java
+│   ├── MinimumBalanceException.java
+│   ├── DuplicateResourceException.java
+│   └── ValidationException.java
+│
+├── util/
+│   ├── Constants.java
+│   ├── InputHelper.java
+│   ├── UIUtils.java
+│   ├── Validator.java
+│   ├── validator/
+│   │   ├── BaseValidator.java
+│   │   ├── AccountValidator.java
+│   │   ├── EmployeeValidator.java
+│   │   ├── AmountValidator.java
+│   │   └── InputValidator.java
+│   └── formatter/
+│       ├── CurrencyFormatter.java
+│       └── DateUtil.java
+│
+└── view/
+    ├── BankApp.java                 ← Frame principal
+    ├── base/
+    │   └── BaseTablePanel.java
+    ├── panel/
+    │   ├── AccountPanel.java
+    │   ├── ClientPanel.java
+    │   ├── EmployeePanel.java
+    │   ├── TransactionPanel.java
+    │   ├── CompanyPanel.java
+    │   ├── ReportPanel.java
+    │   └── ReportTablePanel.java
+    └── componet/
+        └── StatusBar.java
+```
 
-═══ Polimorfismo: Person[] contiene Client y Employee ═══
+---
 
-Array de tipo Person[] almacena diferentes subtipos:
-  [0] Tipo real: Client          | ID: 1001 | Nombre: Laura Hernández
-  [1] Tipo real: Cashier         | ID: 2001 | Nombre: Roberto Silva
-  [2] Tipo real: Supervisor      | ID: 2002 | Nombre: Carmen Díaz
-  [3] Tipo real: Client          | ID: 1002 | Nombre: Diego Ramírez
+## 📐 Diagrama de Herencia
 
-═══ Polimorfismo: Employee[] con diferentes puestos ═══
+```
+Person  (abstract)
+├── Client
+└── Employee  (abstract)
+    ├── Cashier
+    ├── Supervisor
+    └── Receptionist
 
-Array de tipo Employee[] - Método polimórfico calculateVacationDays():
-  • CASHIER         | Sofía Torres | Años:  2 → Vacaciones:  7 días
-  • SUPERVISOR      | Miguel Ángel Pérez | Años:  8 → Vacaciones: 19 días
-  • RECEPTIONIST    | Valentina Castro | Años:  1 → Vacaciones:  5 días
-  • CASHIER         | Andrés Morales | Años:  4 → Vacaciones: 11 días
+BankAccount  (abstract)
+├── SavingsAccount
+└── InvestmentAccount
+```
 
-═══ Polimorfismo: BankAccount[] con diferentes tipos ═══
+---
 
-Array de tipo BankAccount[] - Método polimórfico withdraw():
-  • SA001                | Balance: $  1.000,00 | Tipo: Savings Account
-    ✓ Retiro exitoso de $100,00 | Nuevo balance: $900,00
-  • IA001                | Balance: $ 25.000,00 | Tipo: Investment Account
-    ✓ Retiro exitoso de $100,00 | Nuevo balance: $24.900,00
-  • SA002                | Balance: $  1.000,00 | Tipo: Savings Account
-    ✓ Retiro exitoso de $100,00 | Nuevo balance: $900,00
-  • IA002                | Balance: $ 50.000,00 | Tipo: Investment Account
-    ✓ Retiro exitoso de $100,00 | Nuevo balance: $49.900,00
+## ✅ Requisitos previos
 
-─────────────────────────────────────────────────────────────
+| Herramienta | Versión mínima |
+|---|---|
+| Java (JDK) | 21 |
+| Maven | 3.8+ |
+| IntelliJ IDEA / Eclipse | Cualquier versión reciente |
 
-┌─────────────────────────────────────────────────────────────┐
-│ 3. DEMOSTRACIÓN DE ABSTRACCIÓN                              │
-└─────────────────────────────────────────────────────────────┘
+---
 
-► Las clases abstractas definen CONTRATOS que las clases concretas implementan
+## 🚀 Instalación y ejecución
 
-═══ Person (abstracta) ═══
-  ✗ No se puede instanciar: new Person(1, "Nombre")
-  ✓ Define estructura común: id, fullName, equals(), hashCode()
-  ✓ Clases concretas: Client, Employee
+**1. Clonar el repositorio**
 
-═══ Employee (abstracta, hereda de Person) ═══
-  ✗ No se puede instanciar: new Employee(...)
-  ✓ Método abstracto: getEmployeeType()
-  ✓ Método concreto: calculateVacationDays()
-  ✓ Clases concretas: Cashier, Supervisor, Receptionist
+```bash
+git clone https://github.com/tu-usuario/banco-java.git
+cd banco-java
+```
 
-Cada empleado DEBE implementar getEmployeeType() (método abstracto):
-  • Cashier → getEmployeeType() = CASHIER
-  • Supervisor → getEmployeeType() = SUPERVISOR
-  • Receptionist → getEmployeeType() = RECEPTIONIST
+**2. Compilar el proyecto**
 
-═══ BankAccount (abstracta) ═══
-  ✗ No se puede instanciar: new BankAccount(...)
-  ✓ Métodos abstractos:
-    - isWithdrawalValid(amount)
-    - getAccountType()
-    - getMinimumInitialBalance()
-  ✓ Clases concretas: SavingsAccount, InvestmentAccount
+```bash
+mvn clean compile
+```
 
-Cada cuenta DEBE implementar getAccountType() (método abstracto):
-  • SavingsAccount → getAccountType() = "Savings Account"
-  • InvestmentAccount → getAccountType() = "Investment Account"
+**3. Ejecutar la aplicación con interfaz gráfica**
 
-─────────────────────────────────────────────────────────────
+```bash
+mvn exec:java -Dexec.mainClass="com.Banco.AppBanco"
+```
 
-┌─────────────────────────────────────────────────────────────┐
-│ 4. DEMOSTRACIÓN DE ENCAPSULAMIENTO                          │
-└─────────────────────────────────────────────────────────────┘
+**4. Ejecutar la demostración de POO por consola**
 
-► Los atributos son PRIVADOS y protegidos con validaciones
+```bash
+mvn exec:java -Dexec.mainClass="com.Banco.BankDemoApp"
+```
 
-═══ Protección de datos en Client ═══
-  ✗ NO se puede acceder: cliente.id (es private final)
-  ✗ NO se puede acceder: cliente.fullName (es private)
-  ✓ Acceso controlado: cliente.getId() = 7001
-  ✓ Acceso controlado: cliente.getFullName() = "Ricardo Navarro"
+---
 
-═══ Validaciones en setters ═══
-  Intentando establecer nombre vacío...
-  ✓ Validación exitosa: Name must not be blank
+## 🧪 Tests
 
-  Intentando establecer nombre válido...
-  ✓ Nombre actualizado: Ricardo Navarro Actualizado
+El proyecto incluye una suite de pruebas unitarias con **JUnit 5** y **Mockito**, con cobertura mínima del 80% verificada por JaCoCo.
 
-═══ Validaciones en Employee ═══
-  Salario actual: $2600.0
-  Intentando establecer salario negativo: -1000.0
-  ✓ Validación exitosa: Salary cannot be negative
+**Ejecutar todos los tests:**
 
-  Intentando establecer salario válido: 3000.0
-  ✓ Salario actualizado: $3000.0
+```bash
+mvn test
+```
 
-─────────────────────────────────────────────────────────────
+**Ver reporte de cobertura:**
 
-┌─────────────────────────────────────────────────────────────┐
-│ 5. DEMOSTRACIÓN DE VARIABLES Y MÉTODOS STATIC              │
-└─────────────────────────────────────────────────────────────┘
+```bash
+mvn test jacoco:report
+# Reporte disponible en: target/site/jacoco/index.html
+```
 
-► Variables static: compartidas por TODAS las instancias
+### Estructura de tests
 
-═══ Contador estático de Client ═══
-  Clientes totales antes: 6
-  Clientes totales después: 9
-  ✓ Incremento: 3 clientes
+| Archivo | Capa | Tests |
+|---|---|---|
+| `SavingsAccountTest.java` | Modelo | Depósito exacto $1,000, saldo mínimo, interés compuesto |
+| `InvestmentAccountTest.java` | Modelo | Depósito mínimo $25,000, fullWithdraw, cancelación |
+| `EmployeeTest.java` | Modelo | Vacaciones (9 casos parametrizados), polimorfismo |
+| `ClientTest.java` | Modelo | Encapsulamiento, gestión de cuentas, equals por ID |
+| `InvestmentCompanyTest.java` | Modelo | Validaciones, niveles de riesgo (5 casos) |
+| `AccountServiceTest.java` | Servicio | Ownership, mocks de repositorios, intereses |
+| `PersonServicesTest.java` | Servicio | ClientService y EmployeeService con Mockito |
+| `RepositoryTest.java` | Repositorio | CRUD, búsquedas, listas inmutables |
+| `ValidatorTest.java` | Validadores | AccountValidator, EmployeeValidator, InputValidator |
 
-═══ Contador estático de Employee ═══
-  Empleados totales antes: 13
-  Empleados totales después: 17
-  ✓ Incremento: 4 empleados
+---
 
-═══ Contador estático de BankAccount ═══
-  Cuentas totales antes: 6
-  Cuentas totales después: 9
-  ✓ Incremento: 3 cuentas
+## 📏 Reglas de negocio
 
-═══ Método static de InvestmentCompany ═══
-  Compañías totales antes: 3
-  Compañías totales después: 5
-  ✓ Incremento: 2 compañías
+### Cuenta de Ahorro (`SavingsAccount`)
 
-─────────────────────────────────────────────────────────────
+| Regla | Valor |
+|---|---|
+| Primer depósito | Exactamente **$1,000** |
+| Saldo mínimo | **$500** (no se puede dejar por debajo) |
+| Tasa de interés | Configurable al crear la cuenta (0.0 – 1.0 anual) |
+| Interés mensual | Se aplica automáticamente cada 30 días |
 
-┌─────────────────────────────────────────────────────────────┐
-│ 6. DEMOSTRACIÓN DE REGLAS DE NEGOCIO                        │
-└─────────────────────────────────────────────────────────────┘
+### Cuenta de Inversión (`InvestmentAccount`)
 
-═══ Cuenta de Ahorro: Depósito inicial $1,000 ═══
-  Intentando crear cuenta con $500 (mínimo es $1,000)...
-  ✓ Validación exitosa: Initial balance $500,00 is below required minimum $1000,00 for SavingsAccount
+| Regla | Valor |
+|---|---|
+| Depósito inicial mínimo | **$25,000** |
+| Saldo mínimo | **$10,000** |
+| Retiro total | Mediante `fullWithdraw()` — cancela la cuenta |
 
-  Creando cuenta con $1,000 (depósito válido)...
-  ✓ Cuenta creada: SA201 | Balance: $1000.0
+### Vacaciones de empleados
 
-═══ Cuenta de Ahorro: Saldo mínimo $500 ═══
-  Balance actual: $1000.0
-  Intentando retirar $600 (dejaría $400 < $500)...
-  ✓ Validación exitosa: Retiro bloqueado
+```
+Años trabajados = 0       →  0 días
+Años trabajados = 1       →  5 días  (base)
+Años trabajados = 2 a N   →  5 + 2 × (años - 1) días
+Máximo                    → 20 días
+```
 
-  Intentando retirar $400 (dejaría $600 ≥ $500)...
-  ✓ Retiro exitoso | Nuevo balance: $600.0
+| Años | Días |
+|---|---|
+| 0 | 0 |
+| 1 | 5 |
+| 5 | 13 |
+| 8 | 19 |
+| 10+ | 20 (tope) |
 
-═══ ~~Cuenta de Inversión:~~ Depósito inicial $25,000 ═══
-  Intentando crear cuenta con $10,000 (mínimo es $25,000)...
-  ✓ Validación exitosa: Initial balance $10000,00 is below required minimum $25000,00 for InvestmentAccount
+---
 
-  Creando cuenta con $30,000 (depósito válido)...
-  ✓ Cuenta creada: IA201 | Balance: $30000.0
+## 🔑 Conceptos OOP demostrados
 
-═══ Cálculo de vacaciones de empleados ═══
-  Regla: 5 días base + 2 días/año (máximo 20 días)
+### Herencia
+`Person → Client / Employee` — `Employee → Cashier / Supervisor / Receptionist` — `BankAccount → SavingsAccount / InvestmentAccount`
 
-  •  1 años →  5 días de vacaciones
-  •  5 años → 13 días de vacaciones
-  • 10 años → 20 días de vacaciones
-  • 15 años → 20 días de vacaciones
+### Polimorfismo
+```java
+BankAccount[] accounts = {
+    new SavingsAccount("SA001", client, 1000.0, 0.05),
+    new InvestmentAccount("IA001", client, 25000.0, company)
+};
+for (BankAccount acc : accounts) {
+    acc.withdraw(100.0);  // comportamiento diferente por tipo
+}
+```
 
-═══ Intereses mensuales en cuenta de ahorro ═══
-  Balance inicial: $1000.0
-  Tasa anual: 12% (1% mensual)
-  Balance después de 1 mes: $1010,00
-  Balance después de 2 meses: $1020,10
-  Balance después de 3 meses: $1030,30
+### Abstracción
+`BankAccount` declara métodos abstractos que cada tipo de cuenta implementa de forma distinta:
+- `isWithdrawalValid(double amount)`
+- `getAccountType()`
+- `getMinimumInitialBalance()`
 
-─────────────────────────────────────────────────────────────
+### Encapsulamiento
+Todos los atributos son `private`. Los setters validan antes de modificar:
+```java
+public void setSalary(double salary) {
+    if (salary < 0)
+        throw new IllegalArgumentException("Salary cannot be negative");
+    this.salary = salary;
+}
+```
 
+### Variables y métodos `static`
+Cada entidad mantiene un contador de instancias creadas:
+```java
+Client.getClientCount()
+Employee.getEmployeeCount()
+BankAccount.getAccountCount()
+InvestmentCompany.getCompanyCount()
+```
 
-╔═══════════════════════════════════════════════════════════════╗
-║   FIN DE LA DEMOSTRACIÓN                                      ║
-╚═══════════════════════════════════════════════════════════════╝
+---
 
-Process finished with exit code 0
+## 🔒 Jerarquía de excepciones
+
+```
+BankingException  (RuntimeException base)
+├── AccountNotFoundException
+├── AccountOwnershipException
+├── ClientNotFoundException
+├── EmployeeNotFoundException
+├── DuplicateResourceException
+├── InsufficientFundsException
+├── InvalidAmountException
+├── InvalidTransactionException
+├── InvalidWithdrawalException
+├── MinimumBalanceException
+└── ValidationException
+```
+
+---
+
+## ⚙️ Constantes de negocio (`Constants.java`)
+
+```java
+SAVINGS_MINIMUM_INITIAL   = 1_000.0
+SAVINGS_MINIMUM_BALANCE   =   500.0
+INVESTMENT_MINIMUM_INITIAL = 25_000.0
+INVESTMENT_MINIMUM_BALANCE = 10_000.0
+VACATION_BASE_DAYS        = 5
+VACATION_INCREMENT        = 2
+VACATION_MAX_DAYS         = 20
+RISK_LEVEL_MIN            = 1
+RISK_LEVEL_MAX            = 5
+```
+
+---
+
+## 🖥️ Interfaz gráfica
+
+La aplicación `BankApp` incluye:
+
+| Panel | Funcionalidad |
+|---|---|
+| **Dashboard** | Resumen en tiempo real: clientes, cuentas, empleados, inversiones |
+| **Clients** | Registro y listado de clientes |
+| **Employees** | Registro de cajeros, supervisores y recepcionistas con cálculo de vacaciones |
+| **Accounts** | Apertura de cuentas, depósitos, retiros, aplicación de intereses |
+| **Transactions** | Historial completo de operaciones |
+| **Investors** | Gestión de empresas inversoras |
+| **Reports** | Reportes textuales de clientes, empleados, cuentas y compañías |
+
+---
+
+## 📊 Cobertura de requisitos académicos
+
+| Requisito | Estado |
+|---|---|
+| Modelación UML (clases y relaciones) | ✅ |
+| Variables de instancia | ✅ |
+| Variables y métodos `static` | ✅ |
+| Herencia (Person, Employee, BankAccount) | ✅ |
+| Polimorfismo explícito | ✅ |
+| Abstracción (clases y métodos abstractos) | ✅ |
+| Encapsulamiento (atributos privados + setters validados) | ✅ |
+| Validaciones bancarias (depósitos, saldos mínimos) | ✅ |
+| Manejo de excepciones personalizadas | ✅ |
+| Arquitectura MVC | ✅ |
+| Aplicación demostrativa (`BankDemoApp`) | ✅ |
+| Pruebas unitarias (JUnit 5 + Mockito) | ✅ |
+
+---
+
+## 👤 Autor
+
+Proyecto desarrollado como evidencia de aprendizaje para la **Actividad 1 — Clases y Objetos**.
+
+Tecnologías: `Java 21` · `Java Swing` · `Maven` · `JUnit 5` · `Mockito` · `JaCoCo`
